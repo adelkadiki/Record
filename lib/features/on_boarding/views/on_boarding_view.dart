@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:record/core/database/cache/cache_processor.dart';
 import 'package:record/core/utls/app_assets.dart';
 import 'package:record/core/widgets/custom_button.dart';
+import 'package:record/features/on_boarding/views/presentation/custom_nav_bar.dart';
+import 'package:record/features/on_boarding/views/widgets/on_boarding_body.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:record/core/utls/app_text_style.dart';
 
@@ -12,80 +15,45 @@ class OnBoardingView extends StatefulWidget {
 }
 
 class _OnBoardingViewState extends State<OnBoardingView> {
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          body: Column(
-        children: [const Text('On Boarding View'), OnBoardingBodyView()],
-      )),
-    );
-  }
-}
-
-class OnBoardingBodyView extends StatelessWidget {
-  OnBoardingBodyView({super.key});
-
-  final List<String> images = [
+  final List<String> images = <String>[
     Assets.assetsImagesCar1,
     Assets.assetsImagesCar2,
     Assets.assetsImagesCar3,
   ];
 
-  final PageController _pageController = PageController();
-
+  final PageController pageController = PageController();
+  int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        SizedBox(
-          height: 150,
-          child: PageView.builder(
-            physics: const BouncingScrollPhysics(),
-            controller: _pageController,
-            itemCount: images.length,
-            itemBuilder: (context, index) {
-              return Container(
-                height: 250,
-                width: 400,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(images[index]),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              );
-            },
-          ),
+    return SafeArea(
+      child: Scaffold(
+          body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 25),
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          children: <Widget>[
+            const SizedBox(
+              height: 35,
+            ),
+            CustomNavBar(controller: pageController),
+            const SizedBox(
+              height: 40,
+            ),
+            OnBoardingBodyView(
+              controller: pageController,
+            ),
+            const CustomButton(),
+            const SizedBox(
+              height: 25,
+            ),
+            const Text("Sign up"),
+            const SizedBox(
+              height: 25,
+            ),
+            const Text("Sign in")
+          ],
         ),
-        CustomSmoothPageIndicator(
-          pageController: _pageController,
-          length: images.length,
-        ),
-        const SizedBox(height: 25),
-        Text(
-          "تطبيق رائع جداً",
-          style: AppTextStyle.mainLine,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 25),
-        const CustomButton(),
-      ],
-    );
-  }
-}
-
-class CustomSmoothPageIndicator extends StatelessWidget {
-  const CustomSmoothPageIndicator(
-      {super.key, required this.pageController, required this.length});
-  final PageController pageController;
-  final int length;
-  @override
-  Widget build(BuildContext context) {
-    return SmoothPageIndicator(
-      controller: pageController,
-      count: length,
-      effect: const ScrollingDotsEffect(),
+      )),
     );
   }
 }

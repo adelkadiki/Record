@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:record/core/database/cache/cache_processor.dart';
 import 'package:record/core/routes/app_router.dart';
+import 'package:record/core/services/service_locator.dart';
 import 'package:record/core/utls/app_colors.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  serviceLocator();
+  await getIt<CacheProcessor>().init();
   runApp(const Record());
 }
 
